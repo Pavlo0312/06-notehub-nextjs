@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { createPortal } from "react-dom";
 import css from "./Modal.module.css";
 
@@ -7,27 +7,17 @@ interface ModalProps {
   children: React.ReactNode;
 }
 
-const Modal: React.FC<ModalProps> = ({ onClose, children }) => {
+export default function Modal({ onClose, children }: ModalProps) {
   useEffect(() => {
-    // Відключаємо прокрутку сторінки при відкритті модалки
-    const originalOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-
-    // Обробка Escape
-    const handleEscape = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose();
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") onClose();
     };
     window.addEventListener("keydown", handleEscape);
-
-    return () => {
-      // Відновлюємо прокрутку при закритті модалки
-      document.body.style.overflow = originalOverflow;
-      window.removeEventListener("keydown", handleEscape);
-    };
+    return () => window.removeEventListener("keydown", handleEscape);
   }, [onClose]);
 
-  const handleBackdropClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (e.target === e.currentTarget) onClose();
+  const handleBackdropClick = (event: React.MouseEvent<HTMLDivElement>) => {
+    if (event.target === event.currentTarget) onClose();
   };
 
   return createPortal(
@@ -39,8 +29,6 @@ const Modal: React.FC<ModalProps> = ({ onClose, children }) => {
     >
       <div className={css.modal}>{children}</div>
     </div>,
-    document.getElementById("modal-root") as HTMLElement
+    document.body,
   );
-};
-
-export default Modal;
+}

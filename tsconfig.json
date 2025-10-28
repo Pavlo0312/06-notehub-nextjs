@@ -3,22 +3,26 @@
     "target": "ES2017",
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
+    "types": ["@tanstack/react-query"],
     "skipLibCheck": true,
     "strict": true,
     "noEmit": true,
-    "incremental": true,
+    "esModuleInterop": true,
     "module": "esnext",
     "moduleResolution": "bundler",
-    "esModuleInterop": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "preserve",
-    "plugins": [{ "name": "next" }],
-    "baseUrl": ".",
+    "incremental": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
     "paths": {
       "@/*": ["./*"]
     }
   },
-  "include": ["next-env.d.ts", ".next/types/**/*.ts", "**/*.ts", "**/*.tsx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
   "exclude": ["node_modules"]
 }

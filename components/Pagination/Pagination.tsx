@@ -1,35 +1,35 @@
-import React from 'react';
-import ReactPaginate from 'react-paginate';
-import css from './Pagination.module.css';
+import ReactPaginate from "react-paginate";
+import css from "./Pagination.module.css";
 
-// Інтерфейс пропсів
 interface PaginationProps {
   pageCount: number;
-  onPageChange: (selectedItem: { selected: number }) => void;
+  onPageChange: (page: number) => void;
   currentPage: number;
 }
 
-// Пагінація
-const Pagination: React.FC<PaginationProps> = ({
+export default function Pagination({
   pageCount,
   onPageChange,
   currentPage,
-}) => {
+}: PaginationProps) {
+  if (pageCount <= 1) return null;
+
   return (
     <ReactPaginate
-      previousLabel={'← Previous'}
-      nextLabel={'Next →'}
       pageCount={pageCount}
-      onPageChange={onPageChange}
-      forcePage={currentPage}
+      forcePage={currentPage - 1}
+      onPageChange={({ selected }) => onPageChange(selected + 1)}
       containerClassName={css.pagination}
-      pageClassName={css.page}
       activeClassName={css.active}
-      previousClassName={css.previous}
+      pageClassName={css.page}
+      previousClassName={css.prev}
       nextClassName={css.next}
       disabledClassName={css.disabled}
+      breakLabel="..."
+      marginPagesDisplayed={2}
+      pageRangeDisplayed={3}
+      previousLabel="‹"
+      nextLabel="›"
     />
   );
-};
-
-export default Pagination;
+}

@@ -1,3 +1,3 @@
-export default function Loading() {
+export default function NotesLoading() {
   return <p>Loading, please wait...</p>;
 }
