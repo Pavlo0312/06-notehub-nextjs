@@ -2,7 +2,17 @@ import NotesClient from "./Notes.client";
 import { fetchNotes } from "@/lib/api";
 
 export default async function NotesPage() {
-  const data = await fetchNotes(1, 12, "");
-
-  return <NotesClient initialNotes={data} />;
+  const currentPage = 1;
+  const perPage = 12;
+  const debouncedSearchText = "";
+  const initialValues = await fetchNotes(
+    currentPage,
+    perPage,
+    debouncedSearchText,
+  );
+  return (
+    <>
+      <NotesClient initialData={initialValues} />
+    </>
+  );
 }

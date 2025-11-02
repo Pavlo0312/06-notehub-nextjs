@@ -1,5 +1,9 @@
 "use client";
 
-export default function NoteLoading() {
-  return <p>Loading, please wait...</p>;
+export default function Loading() {
+  return (
+    <>
+      <p>Loading, please wait...</p>
+    </>
+  );
 }
