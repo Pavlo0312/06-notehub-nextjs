@@ -1,54 +1,39 @@
+// lib/api.ts (єдиний варіант)
 import axios from "axios";
-import type { Note, CreateNotePayload } from "@/types/note";
-
-export interface NoteType {
-  notes: Note[];
-  totalPages: number;
-}
+import type { Note, NewNoteAddData } from "@/types/note";
 
 const BASE = "https://notehub-public.goit.study/api";
 const AUTH = `Bearer ${process.env.NEXT_PUBLIC_NOTEHUB_TOKEN ?? ""}`;
 
-export async function fetchNotes(
-  page: number,
-  perPage: number,
-  query: string,
-): Promise<NoteType> {
-  const params: Record<string, string> = {
-    page: String(page),
-    perPage: String(perPage),
-  };
-  if (query.trim()) params.search = query.trim();
+export type NoteType = { notes: Note[]; totalPages: number };
+
+export async function fetchNotes(page: number, perPage: number, search: string) {
+  const params: Record<string, string> = { page: String(page), perPage: String(perPage) };
+  if (search.trim()) params.search = search.trim();
 
   const { data } = await axios.get<NoteType>(`${BASE}/notes`, {
     params,
     headers: { Authorization: AUTH },
   });
-
   return data;
 }
 
-export async function fetchNoteById(id: string | number): Promise<Note> {
-  const nid = Number(id);
-  const { data } = await axios.get<Note>(`${BASE}/notes/${nid}`, {
+export async function addNote(note: NewNoteAddData) {
+  const { data } = await axios.post<Note>(`${BASE}/notes`, note, {
     headers: { Authorization: AUTH },
   });
   return data;
 }
 
-export async function addNote(payload: CreateNotePayload): Promise<Note> {
-  const { title, content, tag } = payload;
-  const { data } = await axios.post<Note>(
-    `${BASE}/notes`,
-    { title, content, tag },
-    { headers: { Authorization: AUTH } },
-  );
+export async function deleteNote(noteId: string) {
+  const { data } = await axios.delete<Note>(`${BASE}/notes/${noteId}`, {
+    headers: { Authorization: AUTH },
+  });
   return data;
 }
 
-export async function deleteNote(id: string | number): Promise<Note> {
-  const nid = Number(id);
-  const { data } = await axios.delete<Note>(`${BASE}/notes/${nid}`, {
+export async function fetchNoteById(id: string) {
+  const { data } = await axios.get<Note>(`${BASE}/notes/${id}`, {
     headers: { Authorization: AUTH },
   });
   return data;
